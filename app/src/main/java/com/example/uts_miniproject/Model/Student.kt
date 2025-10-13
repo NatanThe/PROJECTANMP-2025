@@ -1,4 +1,7 @@
 package com.example.uts_miniproject.Model
 
-class Student {
-}
+data class Student(
+    val usia: Int,
+    val tinggi: Float,
+    val berat: Float
+)
