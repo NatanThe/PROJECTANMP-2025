@@ -4,12 +4,19 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.uts_miniproject.Model.Student
 import com.example.uts_miniproject.Model.DataUkurRepository
 
-class DataUkurViewModel(application: Application) : AndroidViewModel(application) {
+class DataUkurViewModel : ViewModel() {
 
-    private val repository = DataUkurRepository(application)
-    private val _dataList = MutableLiveData<List<Student>>()
-    val dataList: LiveData<List<Student>> get() = _dataList
+    // Data tersimpan di memory (list observable)
+    private val _dataList = MutableLiveData<MutableList<Student>>(mutableListOf())
+    val dataList: LiveData<MutableList<Student>> get() = _dataList
+
+    fun tambahData(student: Student) {
+        val currentList = _dataList.value ?: mutableListOf()
+        currentList.add(student)
+        _dataList.value = currentList
+    }
 }
