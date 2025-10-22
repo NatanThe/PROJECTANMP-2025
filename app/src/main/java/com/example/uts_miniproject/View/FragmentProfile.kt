@@ -43,7 +43,7 @@ class FragmentProfile : Fragment() {
             val DateOfBirthText = binding.inputDOB.text.toString()
             val shareEdit = sharedPreferences.edit()
             shareEdit.putString("name", namaText)
-            shareEdit.putString("gender", gender)
+            shareEdit.putString("gender", "gender")
             shareEdit.putString("dob", DateOfBirthText)
             shareEdit.apply()
         }
