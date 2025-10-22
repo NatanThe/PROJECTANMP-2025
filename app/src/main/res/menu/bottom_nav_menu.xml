@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_ukur"
+        android:icon="@drawable/outline_analytics_ukur_24"
+        android:title="Ukur" />
+
+    <item
+        android:id="@+id/nav_data"
+        android:icon="@drawable/outline_data_person_24"
+        android:title="Data" />
+
+    <item
+        android:id="@+id/nav_profil"
+        android:icon="@drawable/baseline_account_profile_24"
+        android:title="Profil" />
+
+</menu>

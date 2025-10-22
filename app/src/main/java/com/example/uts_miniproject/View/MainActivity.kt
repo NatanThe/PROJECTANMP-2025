@@ -1,60 +1,64 @@
 package com.example.uts_miniproject.View
 
 import android.os.Bundle
+import android.view.Gravity
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.example.uts_miniproject.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.fragment.app.Fragment
+import com.example.uts_miniproject.R
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
-    private lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         drawerLayout = findViewById(R.id.drawer_layout)
-        toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
-        // Tombol di drawer
-        val menuUkur: TextView = findViewById(R.id.menuUkur)
-        val menuData: TextView = findViewById(R.id.menuData)
-        val menuProfil: TextView = findViewById(R.id.menuProfil)
-
-        // Fragment default
-        if (savedInstanceState == null) {
-            replaceFragment(FragmentUkur())
+        // Tombol buka drawer
+        findViewById<ImageView>(R.id.btnDrawer).setOnClickListener {
+            if (drawerLayout.isDrawerOpen(drawerLayout.getChildAt(1))) {
+                drawerLayout.closeDrawers()
+            } else {
+                drawerLayout.openDrawer(drawerLayout.getChildAt(1))
+            }
         }
 
-        // Aksi saat diklik
-        menuUkur.setOnClickListener {
+        // Navigasi drawer
+        findViewById<TextView>(R.id.menuUkur).setOnClickListener {
             replaceFragment(FragmentUkur())
             drawerLayout.closeDrawers()
         }
 
-        menuData.setOnClickListener {
+        findViewById<TextView>(R.id.menuData).setOnClickListener {
             replaceFragment(FragmentData())
             drawerLayout.closeDrawers()
         }
 
-        menuProfil.setOnClickListener {
+        findViewById<TextView>(R.id.menuProfil).setOnClickListener {
             replaceFragment(FragmentProfile())
             drawerLayout.closeDrawers()
         }
-    }
 
-    override fun onOptionsItemSelected(item: android.view.MenuItem): Boolean {
-        if (toggle.onOptionsItemSelected(item)) {
-            return true
+        // Navigasi bottom bar
+        bottomNav.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.nav_ukur -> replaceFragment(FragmentUkur())
+                R.id.nav_data -> replaceFragment(FragmentData())
+                R.id.nav_profil -> replaceFragment(FragmentProfile())
+            }
+            true
         }
-        return super.onOptionsItemSelected(item)
+
+        // Fragment awal
+        replaceFragment(FragmentUkur())
     }
 
     private fun replaceFragment(fragment: Fragment) {

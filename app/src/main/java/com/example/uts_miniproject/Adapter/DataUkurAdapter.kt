@@ -1,70 +1,34 @@
 package com.example.uts_miniproject.Adapter
 
-import android.graphics.Typeface
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.uts_miniproject.Model.Student
-import android.view.View
-import android.content.Context
-import android.view.Gravity
+import com.example.uts_miniproject.R
 
 class DataUkurAdapter(private val dataList: List<Student>) :
-    RecyclerView.Adapter<DataUkurAdapter.DataUkurViewHolder>() {
+    RecyclerView.Adapter<DataUkurAdapter.ViewHolder>() {
 
-    class DataUkurViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvUsia: TextView
-        val tvTinggi: TextView
-        val tvBerat: TextView
-
-        init {
-            val layout = itemView as LinearLayout
-            tvUsia = layout.getChildAt(0) as TextView
-            tvTinggi = layout.getChildAt(1) as TextView
-            tvBerat = layout.getChildAt(2) as TextView
-        }
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val tvUsia: TextView = itemView.findViewById(R.id.tvUsia)
+        val tvTinggi: TextView = itemView.findViewById(R.id.tvTinggi)
+        val tvBerat: TextView = itemView.findViewById(R.id.tvBerat)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataUkurViewHolder {
-        val context: Context = parent.context
-
-        val layout = LinearLayout(context)
-        layout.orientation = LinearLayout.VERTICAL
-        layout.setPadding(20, 20, 20, 20)
-        layout.layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-
-        val tvUsia = TextView(context)
-        tvUsia.textSize = 16f
-        tvUsia.setTypeface(null, Typeface.BOLD)
-        tvUsia.setPadding(0, 0, 0, 6)
-
-        val tvTinggi = TextView(context)
-        tvTinggi.textSize = 15f
-        tvTinggi.setPadding(0, 0, 0, 6)
-
-        val tvBerat = TextView(context)
-        tvBerat.textSize = 15f
-        tvBerat.setPadding(0, 0, 0, 10)
-
-        layout.addView(tvUsia)
-        layout.addView(tvTinggi)
-        layout.addView(tvBerat)
-
-        return DataUkurViewHolder(layout)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_data, parent, false)
+        return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: DataUkurViewHolder, position: Int) {
-        val data = dataList[position]
-        holder.tvUsia.text = "Usia: " + data.usia + " tahun"
-        holder.tvTinggi.text = "Tinggi: " + data.tinggi + " cm"
-        holder.tvBerat.text = "Berat: " + data.berat + " kg"
-    }
+    override fun getItemCount(): Int = dataList.size
 
-    override fun getItemCount(): Int {
-        return dataList.size
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = dataList[position]
+        holder.tvUsia.text = item.usia.toString()
+        holder.tvTinggi.text = String.format("%.1f", item.tinggi)
+        holder.tvBerat.text = String.format("%.1f", item.berat)
     }
 }
