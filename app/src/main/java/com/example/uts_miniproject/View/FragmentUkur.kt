@@ -41,19 +41,19 @@ class FragmentUkur : Fragment() {
     // 🔹 Fungsi untuk menyimpan data ke file TXT di internal storage
     private fun simpanDataKeFile(berat: String, tinggi: String, usia: String) {
         val fileName = "data_ukur.txt"
-        val data = "Berat: $berat kg | Tinggi: $tinggi cm | Usia: $usia tahun\n"
+        // Simpan format sederhana tanpa simbol aneh
+        val data = "$usia $tinggi $berat\n"
 
         try {
-            val fileOutputStream: FileOutputStream =
-                requireContext().openFileOutput(fileName, Context.MODE_APPEND)
+            val fileOutputStream = requireContext().openFileOutput(fileName, Context.MODE_APPEND)
             fileOutputStream.write(data.toByteArray())
             fileOutputStream.close()
-
-            Toast.makeText(requireContext(), "Data berhasil disimpan ke $fileName", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Data berhasil disimpan!", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
-            Toast.makeText(requireContext(), "Gagal menyimpan data: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Gagal menyimpan: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
+
 
     // 🔹 Kosongkan input setelah data disimpan
     private fun kosongkanInput() {

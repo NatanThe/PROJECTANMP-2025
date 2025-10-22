@@ -25,6 +25,7 @@ class FragmentData : Fragment() {
         binding.recyclerViewData.layoutManager = LinearLayoutManager(requireContext())
 
         loadDataFromFile()
+
         return binding.root
     }
 
@@ -32,27 +33,21 @@ class FragmentData : Fragment() {
         try {
             val fileInputStream = requireContext().openFileInput("data_ukur.txt")
             val reader = BufferedReader(InputStreamReader(fileInputStream))
+
             reader.forEachLine { line ->
-                // Format data: Berat: X kg | Tinggi: Y cm | Usia: Z tahun
-                val parts = line.split("|")
+                val parts = line.split(" ")
                 if (parts.size == 3) {
-                    val beratStr = parts[0].substringAfter("Berat: ").substringBefore(" kg").trim()
-                    val tinggiStr = parts[1].substringAfter("Tinggi: ").substringBefore(" cm").trim()
-                    val usiaStr = parts[2].substringAfter("Usia: ").substringBefore(" tahun").trim()
-
-                    val berat = beratStr.toFloatOrNull() ?: 0f
-                    val tinggi = tinggiStr.toFloatOrNull() ?: 0f
-                    val usia = usiaStr.toIntOrNull() ?: 0
-
+                    val usia = parts[0].toIntOrNull() ?: 0
+                    val tinggi = parts[1].toFloatOrNull() ?: 0f
+                    val berat = parts[2].toFloatOrNull() ?: 0f
                     dataList.add(Student(usia, tinggi, berat))
                 }
             }
+
             reader.close()
             fileInputStream.close()
 
-            // 🔹 Set adapter
             binding.recyclerViewData.adapter = DataUkurAdapter(dataList)
-
         } catch (e: Exception) {
             e.printStackTrace()
         }
