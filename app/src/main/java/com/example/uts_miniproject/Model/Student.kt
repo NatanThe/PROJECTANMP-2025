@@ -6,12 +6,16 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Student(
+    @ColumnInfo(name="nama")
+    val nama: String,
+    @ColumnInfo(name="tanggal lahir")
+    val dob: String,
     @ColumnInfo(name="usia")
     val usia: Int,
-    @ColumnInfo(name="tinggi")
-    val tinggi: Float,
     @ColumnInfo(name="berat")
-    val berat: Float
+    val berat: Float,
+    @ColumnInfo(name="tinggi")
+    val tinggi: Float
 ){
     @PrimaryKey(autoGenerate = true)
     var uuid: Int=0
