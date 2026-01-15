@@ -7,7 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.example.uts_miniproject.Model.Student
+import com.example.uts_miniproject.Model.StudentDatabase
 import com.example.uts_miniproject.databinding.FragmentUkurBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.FileOutputStream
 
 class FragmentUkur : Fragment() {
@@ -18,19 +24,37 @@ class FragmentUkur : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // 🔹 Gunakan ViewBinding agar sesuai dengan fragment_ukur.xml
+
         binding = FragmentUkurBinding.inflate(inflater, container, false)
 
-        // 🔹 Tombol tambah data ditekan
-        binding.btnTambahData.setOnClickListener {
-            val berat = binding.inputBerat.text.toString()
-            val tinggi = binding.inputTinggi.text.toString()
-            val usia = binding.inputUsia.text.toString()
+        val db = StudentDatabase.getInstance(requireContext())
+        val dao = db.studentDao()
 
-            if (berat.isEmpty() || tinggi.isEmpty() || usia.isEmpty()) {
+        binding.btnTambahData.setOnClickListener {
+            val beratText = binding.inputBerat.text.toString()
+            val tinggiText = binding.inputTinggi.text.toString()
+            val usiaText = binding.inputUsia.text.toString()
+
+            if (beratText.isEmpty() || tinggiText.isEmpty() || usiaText.isEmpty()) {
                 Toast.makeText(requireContext(), "Harap isi semua data!", Toast.LENGTH_SHORT).show()
-            } else {
-                simpanDataKeFile(berat, tinggi, usia)
+                return@setOnClickListener
+            }
+
+            val student = Student(
+                nama = "User",
+                dob = "-",
+                usia = usiaText.toInt(),
+                berat = beratText.toFloat(),
+                tinggi = tinggiText.toFloat()
+            )
+
+            // INSERT ke Room
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    dao.insertAll(student)
+                }
+
+                Toast.makeText(requireContext(), "Data berhasil disimpan ke Room", Toast.LENGTH_SHORT).show()
                 kosongkanInput()
             }
         }
@@ -38,24 +62,6 @@ class FragmentUkur : Fragment() {
         return binding.root
     }
 
-    // 🔹 Fungsi untuk menyimpan data ke file TXT di internal storage
-    private fun simpanDataKeFile(berat: String, tinggi: String, usia: String) {
-        val fileName = "data_ukur.txt"
-        // Simpan format sederhana tanpa simbol aneh
-        val data = "$usia $tinggi $berat\n"
-
-        try {
-            val fileOutputStream = requireContext().openFileOutput(fileName, Context.MODE_APPEND)
-            fileOutputStream.write(data.toByteArray())
-            fileOutputStream.close()
-            Toast.makeText(requireContext(), "Data berhasil disimpan!", Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
-            Toast.makeText(requireContext(), "Gagal menyimpan: ${e.message}", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-
-    // 🔹 Kosongkan input setelah data disimpan
     private fun kosongkanInput() {
         binding.inputBerat.setText("")
         binding.inputTinggi.setText("")

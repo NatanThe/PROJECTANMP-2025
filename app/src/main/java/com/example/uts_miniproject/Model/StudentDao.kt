@@ -11,11 +11,11 @@ interface StudentDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg student: Student)
 
-    @Query("SELECT * FROM Student")
+    @Query("SELECT * FROM Student ORDER BY uuid DESC")
     fun selectAllTodo(): List<Student>
 
     @Query("SELECT * FROM student WHERE uuid= :id")
-    fun selectTodo(id:Int): Student
+    fun getStudentById(id: Int): Student
 
     @Delete
     fun deleteTodo(todo: Student)

@@ -14,6 +14,18 @@ abstract class StudentDatabase: RoomDatabase() {
         private var instance: StudentDatabase? = null
         private val LOCK = Any()
 
+        fun getInstance(context: Context): StudentDatabase {
+            return instance ?: synchronized(this) {
+                Room.databaseBuilder(
+                    context.applicationContext,
+                    StudentDatabase::class.java,
+                    "newtododb"
+                ).build().also {
+                    instance = it
+                }
+            }
+        }
+
         fun buildDatabase(context: Context) =
             Room.databaseBuilder(
                 context.applicationContext,

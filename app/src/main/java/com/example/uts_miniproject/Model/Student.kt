@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class Student(
     @ColumnInfo(name="nama")
     val nama: String,
-    @ColumnInfo(name="tanggal lahir")
+    @ColumnInfo(name = "tanggal_lahir")
     val dob: String,
     @ColumnInfo(name="usia")
     val usia: Int,
